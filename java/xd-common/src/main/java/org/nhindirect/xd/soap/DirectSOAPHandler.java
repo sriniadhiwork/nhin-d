@@ -132,8 +132,14 @@ public class DirectSOAPHandler implements SOAPHandler<SOAPMessageContext>
 
                 // edit Envelope
                 SOAPEnvelope env = sp.getEnvelope();
+                System.out.println("Header value------>" + env.getHeader());
+                LOGGER.info("Fix for XDR");
+              
+                if (env.getHeader() != null){
+                    env.getHeader().detachNode();
+                }
                 SOAPHeader sh = env.addHeader();
-
+                System.out.println("Header value------>" + env.getHeader());
                 @SuppressWarnings("unused")
                 SOAPBody sb = env.getBody();
                 try{
@@ -242,9 +248,11 @@ public class DirectSOAPHandler implements SOAPHandler<SOAPMessageContext>
 
                 SOAPPart sp = msg.getSOAPPart();
 
-                // edit Envelope
+             // edit Envelope
                 SOAPEnvelope env = sp.getEnvelope();
                 SOAPHeader sh = env.getHeader();
+                
+                
 
                 @SuppressWarnings("unchecked")
                 Iterator<Node> it = sh.extractAllHeaderElements();
@@ -401,6 +409,7 @@ public class DirectSOAPHandler implements SOAPHandler<SOAPMessageContext>
         LOGGER.info("--------------------");
         LOGGER.info(" DUMP OF SOAP MESSAGE");
         LOGGER.info("--------------------");
+        LOGGER.info("HEADER FIX FOR XDR----------");
 
         try
         {

@@ -21,15 +21,13 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
 package org.nhind.james.mailet;
 
-import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.mail.Address;
-import javax.mail.MessagingException;
 import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 
@@ -56,9 +54,11 @@ import org.nhindirect.stagent.mail.notifications.NotificationMessage;
 import org.nhindirect.xd.routing.RoutingResolver;
 import org.nhindirect.xd.routing.impl.RoutingResolverImpl;
 import org.nhindirect.xd.transform.MimeXdsTransformer;
-import org.nhindirect.xd.transform.impl.DefaultMimeXdsTransformer;
+import org.nhindirect.xd.transform.impl.TTTMimeXdsTransformer;
 
 import com.google.inject.Provider;
+
+import ihe.iti.xds_b._2007.ProvideAndRegisterDocumentSetRequestType;
 
 /**
  * An Apache James Mailet that converts clinical messages into IHE
@@ -352,7 +352,7 @@ public class DirectXdMailet extends AbstractNotificationAwareMailet
     {
         if (this.mimeXDSTransformer == null)
         {
-            this.mimeXDSTransformer = new DefaultMimeXdsTransformer();
+            this.mimeXDSTransformer = new TTTMimeXdsTransformer();
         }
 
         return this.mimeXDSTransformer;

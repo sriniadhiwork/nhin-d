@@ -50,6 +50,7 @@ public enum MimeType
     APPLICATION_XML("application/xml", "xml"), 
     APPLICATION_PDF("application/pdf", "pdf"), 
     MULTIPART_MIXED("multipart/mixed", "???"),
+    MULTIPART_ALTERNATIVE("multipart/alternative", "???"),
     MULTIPART("multipart", "???"),
     UNKNOWN(null, "txt");
 

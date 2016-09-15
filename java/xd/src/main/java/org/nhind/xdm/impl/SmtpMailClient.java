@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -65,10 +66,9 @@ public class SmtpMailClient implements MailClient
             throw new IllegalArgumentException("Hostname, username, and password must be provided.");
         
         this.hostname = hostname;
-        this.username = username;
-        this.password = password;
+        this.username = "xdr@ttpds2dev.sitenv.org";
+        this.password = "xdrpass";
     }
-
     /*
      * (non-Javadoc)
      * 
@@ -78,13 +78,18 @@ public class SmtpMailClient implements MailClient
     {
         boolean debug = false;
         java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-
+        System.out.println("Add property to trust all certificates");
+        System.out.println(hostname);
+        System.out.println(username);
+        System.out.println(password);
+        
         // Set the host SMTP address
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", hostname);
         props.put("mail.smtp.auth", "true");
+        props.setProperty("mail.smtp.ssl.trust", "*");
 
         Authenticator auth = new SMTPAuthenticator();
         Session session = Session.getInstance(props, auth);
@@ -93,11 +98,17 @@ public class SmtpMailClient implements MailClient
 
         InternetAddress addressFrom = new InternetAddress(message.getSender());
 
+        System.out.println("from address---->" + addressFrom);
+        
+      //  addressFrom = new InternetAddress("hisp-testing@ttpds2dev.sitenv.org");
+        
+     //   System.out.println("from address after cahnge---->" + addressFrom);
         InternetAddress[] addressTo = new InternetAddress[message.getReceivers().size()];
         int i = 0;
         for (String recipient : message.getReceivers())
         {
             addressTo[i++] = new InternetAddress(recipient);
+            System.out.println("receipient address---->" + recipient);
         }
 
         // Build message object
@@ -125,7 +136,15 @@ public class SmtpMailClient implements MailClient
         mailBody.addBodyPart(mimeAttach);
 
         mmessage.setContent(mailBody);
+      //  System.out.println("-----calling my send------");
+     //   mysend();
         Transport.send(mmessage);
+        
+        
+       /*Transport transport = session.getTransport("smtp");
+		transport.connect(hostname,username, password);
+		transport.sendMessage(mmessage, mmessage.getAllRecipients());
+		transport.close();*/
     }
 
     /**
@@ -146,5 +165,58 @@ public class SmtpMailClient implements MailClient
             return new PasswordAuthentication(username, password);
         }
     }
+    
+   /* public static void mysend(){
+
+		System.setProperty("java.net.preferIPv4Stack", "true");
+
+
+		try{
+
+			
+
+
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable","true");
+			props.put("mail.smtp.starttls.required", "true");
+			props.put("mail.smtp.auth.mechanisms", "PLAIN");
+			props.setProperty("mail.smtp.ssl.trust", "*");
+
+			Session session = Session.getInstance(props, null);
+
+			for (int i = 0; i < 3; i++) {
+
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("hisp-testing@ttpds2dev.sitenv.org"));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse("testing@hit-testing.nist.gov"));
+				message.setSubject("Message "+ i);
+				message.setText("This is a message to test!");
+				message.addHeader("Disposition-Notification-Options", "X-DIRECT-FINAL-DESTINATION-DELIVERY=optional,true");
+				BodyPart messageBodyPart = new MimeBodyPart();
+				messageBodyPart.setText("This is message body");
+				
+
+
+				System.setProperty("java.net.preferIPv4Stack", "true");
+
+				Transport transport = session.getTransport("smtp");
+				transport.connect("ttpds2dev.sitenv.org","hisp-testing@ttpds2dev.sitenv.org", "hisptestingpass");
+				transport.sendMessage(message, message.getAllRecipients());
+				transport.close();
+				int j = i+1;
+				System.out.println("Email sent " + j);
+
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+	}*/
 
 }

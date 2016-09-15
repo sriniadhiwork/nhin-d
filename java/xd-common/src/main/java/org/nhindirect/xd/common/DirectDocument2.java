@@ -157,8 +157,17 @@ public class DirectDocument2
         private String mimeType;
         private String id;
         private String description;
+        private String name;
 
-        private Date creationTime;
+        public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		private Date creationTime;
         private String languageCode;
         private Date serviceStartTime;
         private Date serviceStopTime;
@@ -270,6 +279,7 @@ public class DirectDocument2
 
             eot.setName(makeInternationalStringType(classCode_localized));
             eot.setDescription(makeInternationalStringType(description));
+            eot.setName(makeInternationalStringType(name));
 
             // author
             ClassificationType authorClassification = new ClassificationType();
@@ -386,7 +396,8 @@ public class DirectDocument2
             ExternalIdentifierType xdsDocumentEntry_patientId = new ExternalIdentifierType();
             xdsDocumentEntry_patientId.setValue(patientId);
             xdsDocumentEntry_patientId.setRegistryObject(id);
-            xdsDocumentEntry_patientId.setId(ExternalIdentifierTypeEnum.DOC_PATIENT_ID.getIdentificationId());
+         //   xdsDocumentEntry_patientId.setId(ExternalIdentifierTypeEnum.DOC_PATIENT_ID.getIdentificationId());
+            xdsDocumentEntry_patientId.setId("e808");
             xdsDocumentEntry_patientId.setIdentificationScheme(ExternalIdentifierTypeEnum.DOC_PATIENT_ID.getIdentificationScheme());
             xdsDocumentEntry_patientId.setName(makeInternationalStringType(ExternalIdentifierTypeEnum.DOC_PATIENT_ID.getLocalizedString()));
 
@@ -396,7 +407,8 @@ public class DirectDocument2
             ExternalIdentifierType xdsDocumentEntry_uniqueId = new ExternalIdentifierType();
             xdsDocumentEntry_uniqueId.setValue(uniqueId);
             xdsDocumentEntry_uniqueId.setRegistryObject(id);
-            xdsDocumentEntry_uniqueId.setId(ExternalIdentifierTypeEnum.DOC_UNIQUE_ID.getIdentificationId());
+          //  xdsDocumentEntry_uniqueId.setId(ExternalIdentifierTypeEnum.DOC_UNIQUE_ID.getIdentificationId());
+            xdsDocumentEntry_uniqueId.setId("e909");
             xdsDocumentEntry_uniqueId.setIdentificationScheme(ExternalIdentifierTypeEnum.DOC_UNIQUE_ID.getIdentificationScheme());
             xdsDocumentEntry_uniqueId.setName(makeInternationalStringType(ExternalIdentifierTypeEnum.DOC_UNIQUE_ID.getLocalizedString()));
 
@@ -407,6 +419,11 @@ public class DirectDocument2
 
         public void setValues(ExtrinsicObjectType eot) throws MetadataException
         {
+        	
+        	 if (eot.getName() != null && eot.getName().getLocalizedString() != null && !eot.getName().getLocalizedString().isEmpty()){
+                 name = eot.getName().getLocalizedString().get(0).getValue();
+             }
+        	 
             mimeType = eot.getMimeType();
             id = eot.getId();
 

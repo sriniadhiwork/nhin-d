@@ -312,8 +312,8 @@ public class DirectDocuments {
     static public class SubmissionSet {
 
         private String id;
-        private String name;
-        private String description;
+        private String name = "AutoFill";
+        private String description = "AutoFill";
         private Date submissionTime;
         private List<String> intendedRecipient = new ArrayList<String>();
         private String authorPerson;
@@ -551,6 +551,9 @@ public class DirectDocuments {
          *            the name to set
          */
         public void setName(String name) {
+        	if (name == null || name.isEmpty()){
+        		name = "AutoFill";
+        	}
             this.name = name;
         }
 
@@ -566,6 +569,9 @@ public class DirectDocuments {
          *            the description to set
          */
         public void setDescription(String description) {
+        	if (description == null || description.isEmpty()){
+        		description = "AutoFill";
+        	}
             this.description = description;
         }
 
